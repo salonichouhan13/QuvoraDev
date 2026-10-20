@@ -1,26 +1,92 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* Warm "espresso & cream" palette. Overriding Tailwind's own colour variables
+   re-themes every existing class (zinc / violet / indigo / cyan) without touching components. */
+@theme {
+  --color-zinc-50: #f6f1e8;
+  --color-zinc-100: #ece4d3;
+  --color-zinc-200: #ddd3bf;
+  --color-zinc-300: #c9bea9;
+  --color-zinc-400: #a89c88;
+  --color-zinc-500: #877c6b;
+  --color-zinc-600: #655b4e;
+  --color-zinc-700: #473f35;
+  --color-zinc-800: #2d261f;
+  --color-zinc-900: #1d1612;
+  --color-zinc-950: #130e0b;
+
+  --color-violet-200: #ead9c0;
+  --color-violet-300: #dcc19b;
+  --color-violet-400: #c9a57c;
+  --color-violet-500: #b58a5e;
+  --color-violet-600: #8a5a36;
+  --color-violet-700: #6b4429;
+
+  --color-indigo-600: #7a4e2d;
+  --color-indigo-700: #5d3a22;
+
+  --color-cyan-500: #c9a57c;
+  --color-cyan-600: #b58a5e;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+:root { color-scheme: dark; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: #130e0b;
+  color: #ece4d3;
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+::selection { background: #c9a57c; color: #1d1612; }
+
+/* Serif headings (Fraunces), regular weight like the reference design */
+.font-display {
+  font-family: var(--font-fraunces), Georgia, "Times New Roman", serif;
+  font-weight: 400;
+}
+
+/* Italic tan accent word */
+.gradient-text { color: #c9a57c; font-style: italic; }
+
+.glass {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(201, 165, 124, 0.16);
+  box-shadow: 0 12px 40px -16px rgba(0, 0, 0, 0.7);
+}
+
+/* Old purple grid decoration is not part of the new look */
+.bg-grid { background-image: none; }
+
+.section { margin-left: auto; margin-right: auto; max-width: 72rem; padding: 5rem 1.25rem; }
+
+/* ---------- Animations: pure CSS, so content is ALWAYS visible even if JS fails ---------- */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* On page load (hero) */
+.rise { animation: fadeUp 0.7s ease-out both; }
+
+/* On scroll (supported browsers only; elsewhere elements simply stay visible) */
+@supports (animation-timeline: view()) {
+  .reveal {
+    animation: fadeUp linear both;
+    animation-timeline: view();
+    animation-range: entry 5% entry 35%;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* Tech marquee strip */
+@keyframes marquee { to { transform: translateX(-50%); } }
+.marquee-track { display: flex; width: max-content; animation: marquee 40s linear infinite; }
+.marquee:hover .marquee-track { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .rise, .reveal { animation: none; }
+  .marquee-track { animation: none; }
 }

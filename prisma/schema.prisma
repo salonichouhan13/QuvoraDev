@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL") // Supabase pooled connection (port 6543)
+  directUrl = env("DIRECT_URL")   // Supabase direct connection (port 5432), used for migrations
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  IN_PROGRESS
+  WON
+  LOST
+}
+
+model Lead {
+  id        String     @id @default(cuid())
+  name      String
+  email     String
+  phone     String
+  service   String
+  budget    String
+  message   String     @db.Text
+  status    LeadStatus @default(NEW)
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+
+  @@index([status])
+  @@index([createdAt])
+  @@map("leads")
+}
