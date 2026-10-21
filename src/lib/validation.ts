@@ -9,8 +9,8 @@ export const contactSchema = z.object({
     .string()
     .trim()
     .regex(/^\+?[0-9\s-]{7,15}$/, "Enter a valid WhatsApp number"),
-  service: z.enum(SERVICES, { errorMap: () => ({ message: "Select a service" }) }),
-  budget: z.enum(BUDGETS, { errorMap: () => ({ message: "Select a budget" }) }),
+  service: z.enum(SERVICES, { message: "Select a service" }),
+  budget: z.enum(BUDGETS, { message: "Select a budget" }),
   message: z
     .string()
     .trim()
@@ -21,3 +21,4 @@ export const contactSchema = z.object({
 });
 
 export type ContactInput = z.infer<typeof contactSchema>;
+
